@@ -112,17 +112,17 @@ func main() {
 	chat = newChat()
 
 	// Index
-	m.Get("/", func(ctx *macaron.Context) {
+	m.Get("/", func(c *macaron.Context) {
 		c.HTML(200, "index", "")
 	})
 
 	// render the room
-	m.Get("/rooms/:name", func(ctx *macaron.Context) {
+	m.Get("/rooms/:name", func(c *macaron.Context) {
 		c.HTML(200, "room", map[string]map[string]string{"room": map[string]string{"name": c.Params(":name")}})
 	})
 
 	// This is the sockets connection for the room, it is a json mapping to sockets.
-	m.Get("/sockets/rooms/:name/:clientname", sockets.JSON(Message{}), func(ctx *macaron.Context, receiver <-chan *Message, sender chan<- *Message, done <-chan bool, disconnect chan<- int, err <-chan error) (int, string) {
+	m.Get("/sockets/rooms/:name/:clientname", sockets.JSON(Message{}), func(c *macaron.Context, receiver <-chan *Message, sender chan<- *Message, done <-chan bool, disconnect chan<- int, err <-chan error) (int, string) {
 		client := &Client{c.Params("clientname"), receiver, sender, done, err, disconnect}
 		r := chat.getRoom(c.Params("name"))
 		r.appendClient(client)

@@ -136,7 +136,7 @@ var RoomForm = function() {
   }
   
   var initialize = function() {
-    r.create().handleForm().handleAway();
+    r.create().handleForm();
   }();
 }
 
